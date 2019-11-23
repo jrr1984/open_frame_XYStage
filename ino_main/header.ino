@@ -1,5 +1,5 @@
 #include <AccelStepper.h>
-#include <SerialCommand_TS.h>       // Command library to handle serial commands. The _TS version is case insensitive.
+#include <SerialCommand_TS.h>   
 #include <EEPROM.h>
 #include <EEPROMAnything.h>
 #include <avr/pgmspace.h>
@@ -17,10 +17,12 @@ unsigned long z_accel = 400;
 #define ZEnablePin A8
 #define Tpolling 200
 #define Tupdate 50
-#define steps_per_mm 6400
-#define EEPROM_reg 20
-#define xeeprom_dir 21
-#define zeeprom_dir 22
+const float steps_per_mum = 6.4;
+#define x_flag 107
+#define x_dir 108
+#define z_flag 7
+#define z_dir 8
+
 
 int EnabledX = 0;
 int EnabledZ = 0;
@@ -72,16 +74,17 @@ void connect_to_stage(){
   digitalWrite(XEnablePin, !EnabledX);
   digitalWrite(ZEnablePin, !EnabledZ);
 
-  if (EEPROM.read(EEPROM_reg)) {    
-    long x_steps, z_steps;
-
-    EEPROM_readAnything(xeeprom_dir, x_steps);
+  if (EEPROM.read(x_flag)) {    
+    long x_steps;
+    EEPROM_readAnything(x_dir, x_steps);
     XStepper.setCurrentPosition(x_steps);
-
-    EEPROM_readAnything(zeeprom_dir, z_steps);
-    ZStepper.setCurrentPosition(z_steps);
-
     get_x();
+    
+  }
+  if (EEPROM.read(z_flag)){
+    long z_steps;
+    EEPROM_readAnything(z_dir, z_steps);
+    ZStepper.setCurrentPosition(z_steps);
     get_z();
   }
   TPOld = millis() - Tpolling/2;                  // Asynchronous polling 
@@ -113,16 +116,16 @@ void help(){
 }
 
 void get_x(){        
-  Serial.println(steps_to_position(XStepper.currentPosition()), 4);
+  Serial.println(steps_to_position(XStepper.currentPosition()), 2);
 }
 
 void get_z(){        
-  Serial.println(steps_to_position(ZStepper.currentPosition()), 4);
+  Serial.println(steps_to_position(ZStepper.currentPosition()), 2);
 }
 
 void get_x_z(){        
-  Serial.println(steps_to_position(XStepper.currentPosition()), 4);
-  Serial.println(steps_to_position(ZStepper.currentPosition()), 4);
+  Serial.println(steps_to_position(XStepper.currentPosition()), 2);
+  Serial.println(steps_to_position(ZStepper.currentPosition()), 2);
 }          
 
 void motion_complete(){             
@@ -137,8 +140,8 @@ void motion_complete(){
           digitalWrite(XEnablePin, !(EnabledX=0));      // ... disable motor
           }
         else if(XMoving == 800){                        // 100 * (5 sec.) after a move
-          EEPROM_writeAnything(EEPROM_reg +1, XStepper.currentPosition());   // Save position to EEPROM
-          EEPROM.write(EEPROM_reg, true);              // ... and set EEPROM flag
+          EEPROM_writeAnything(x_dir, XStepper.currentPosition());   // Save position to EEPROM
+          EEPROM.write(x_flag, true);              // ... and set EEPROM flag
           XMoving = 0; }                                // ... and reset the moving variable
       }
   }
@@ -153,8 +156,8 @@ void motion_complete(){
           digitalWrite(ZEnablePin, !(EnabledZ=0));      // ... disable motor
           }
         else if(ZMoving == 800){                        // 100 * (5 sec.) after a move
-          EEPROM_writeAnything(EEPROM_reg +2, ZStepper.currentPosition());
-          EEPROM.write(EEPROM_reg, true);              // ... and set EEPROM flag
+          EEPROM_writeAnything(z_dir, ZStepper.currentPosition());
+          EEPROM.write(z_flag, true);              // ... and set EEPROM flag
           ZMoving = 0; }                                // ... and reset the moving variable
       }
   }
@@ -168,20 +171,24 @@ void turn_on(){
 void turn_off(){
   digitalWrite(XEnablePin,HIGH);
   digitalWrite(ZEnablePin,HIGH);
-  if (!EEPROM.read(EEPROM_reg)){           
-    EEPROM_writeAnything(xeeprom_dir, XStepper.currentPosition());
-    EEPROM_writeAnything(zeeprom_dir, ZStepper.currentPosition());
-    EEPROM.write(EEPROM_reg, true);}       
+  if (!EEPROM.read(x_flag)){           
+    EEPROM_writeAnything(x_dir, XStepper.currentPosition());
+    EEPROM.write(x_flag, true);
+    }
+   if (!EEPROM.read(z_flag)){
+    EEPROM_writeAnything(z_dir, ZStepper.currentPosition());
+    EEPROM.write(z_flag, true);
+   }
 }
 
 void start_movex(){
-  EEPROM.write(EEPROM_reg, false);
+  EEPROM.write(x_flag, false);
   digitalWrite(XEnablePin,LOW);
   XMoving = 1;
 }
 
 void start_movez(){
-  EEPROM.write(EEPROM_reg, false);
+  EEPROM.write(z_flag, false);
   digitalWrite(ZEnablePin,LOW);
   ZMoving = 1;
 }
@@ -189,11 +196,11 @@ void start_movez(){
 
 
 void get_x_target(){        
-  Serial.println(steps_to_position(XStepper.targetPosition()), 4 );
+  Serial.println(steps_to_position(XStepper.targetPosition()), 2 );
 }
 
 void get_z_target(){        
-  Serial.println(steps_to_position(ZStepper.targetPosition()), 4 );
+  Serial.println(steps_to_position(ZStepper.targetPosition()), 2 );
 }
 
 void set_x_acceleration(){          
@@ -314,11 +321,11 @@ void is_z_moving(){
 }
 
 long position_to_steps(float pos){         
-  return (round(pos * steps_per_mm));
+  return (round(pos * steps_per_mum));
 }
 
 float steps_to_position(long steps){      
-  return ((float)(steps / (steps_per_mm))); 
+  return ((float)(steps / (steps_per_mum))); 
 }
 
 void unrecognized(const char * command) {   
@@ -337,31 +344,33 @@ void comm_interface(){
 
   sCmd.addCommand("xz", get_x_z);
 
-  sCmd.addCommand("OFF", turn_off);
+  sCmd.addCommand("off", turn_off);
 
-  sCmd.addCommand("XACC", set_x_acceleration);
+  sCmd.addCommand("xacc", set_x_acceleration);
 
-  sCmd.addCommand("ZACC", set_z_acceleration);
+  sCmd.addCommand("zacc", set_z_acceleration);
 
-  sCmd.addCommand("XACC?", get_x_acceleration);
+  sCmd.addCommand("wxacc", get_x_acceleration);
 
-  sCmd.addCommand("ZACC?", get_z_acceleration);
+  sCmd.addCommand("wzacc", get_z_acceleration);
 
-  sCmd.addCommand("MAXXVEL", set_max_x_vel);
+  sCmd.addCommand("maxxvel", set_max_x_vel);  
 
-  sCmd.addCommand("MAXZVEL", set_max_z_vel);
+  sCmd.addCommand("maxzvel", set_max_z_vel);
 
-  sCmd.addCommand("MAXXVEL?", get_max_x_vel);
+  sCmd.addCommand("wmaxxvel", get_max_x_vel);
 
-  sCmd.addCommand("MAXZVEL?", get_max_z_vel);
+  sCmd.addCommand("wmaxxvel", get_max_z_vel);
 
   sCmd.addCommand("movx", move_to_x);
 
   sCmd.addCommand("movz", move_to_z);
 
-  sCmd.addCommand("ISXMOV?", is_x_moving);
+  sCmd.addCommand("isxmov", is_x_moving);
 
-  sCmd.addCommand("ISZMOV?", is_z_moving);
+  sCmd.addCommand("iszmov", is_z_moving);
+  sCmd.addCommand("xtarg", get_x_target);
+  sCmd.addCommand("ztarg", get_z_target);
 
   sCmd.setDefaultHandler(unrecognized);     
 }                     
