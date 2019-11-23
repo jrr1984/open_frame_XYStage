@@ -41,8 +41,9 @@ class XZStage:
         else:
             log.error('Connection Issue!')
             return
-        # self.XZStage.readline()
-        log.info('XZStage in position ({},{})\u03BCm'.format(self.get_x(),self.get_z()))
+        init_x = float(self.XZStage.readline())
+        init_z = float(self.XZStage.readline())
+        log.info('XZStage in position ({},{})\u03BCm'.format(init_x,init_z))
 
     def set_max_x_vel(self,value):
         value = bytes(str(value), encoding="ascii")
@@ -91,16 +92,10 @@ class XZStage:
         z = bytes(str(z), encoding="ascii")
         self.XZStage.write(bytes(b'movx ' + x + b'\n'))
         self.XZStage.write(bytes(b'movz ' + z + b'\n'))
-        self.XZStage.readline()
-        self.XZStage.readline()
-        self.XZStage.readline()
-        self.XZStage.readline()
-        log.info('Target position: ({},{})\u03BCm'.format(x_t,z_t))
-        # log.info('Target position: ({},{})\u03BCm'.format(self.get_x(),self.get_z()))
+        log.info('Target position: ({},{})\u03BCm'.format(self.get_x_target(),self.get_z_target()))
         while ((int(self.get_x()),int(self.get_z())) != (x_t,z_t)):
             log.debug('Actual position: ({},{})\u03BCm'.format(int(self.get_x()),int(self.get_z())))
-            log.debug('Targetted position: ({},{})\u03BCm'.format(x_t,z_t))
-            time.sleep(0.1)
+            # time.sleep(0.1)
         log.info('XZStage in position ({},{})\u03BCm'.format(self.get_x(),self.get_z()))
 
 

@@ -276,11 +276,9 @@ void move_to_x(){
       XMoveAbs = 1;
     }
     else {
-    XStepper.moveTo(Steps);             
-    get_x_target();             
+    XStepper.moveTo(Steps);                
     }
-  }
-  else {get_x();}              
+  }              
 }
 
 void move_to_z(){             
@@ -296,10 +294,8 @@ void move_to_z(){
     }
     else {
     ZStepper.moveTo(Steps);             
-    get_z_target();
     }
   }
-  else {get_z();}              
 }
 
 void is_x_moving(){          

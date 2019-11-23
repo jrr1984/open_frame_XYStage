@@ -8,7 +8,7 @@ from XZStage import XZStage
 
 XZStage = XZStage()
 XZStage.set_stage()
-XZStage.move_to_x_y(0,0)
+XZStage.move_to_x_y(500,500)
 XZStage.turn_off()
 
 
