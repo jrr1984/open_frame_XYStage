@@ -18,10 +18,10 @@ unsigned long z_accel = 400;
 #define Tpolling 200
 #define Tupdate 50
 const float steps_per_mum = 6.4;
-#define x_flag 107
-#define x_dir 108
-#define z_flag 7
-#define z_dir 8
+#define x_flag 207
+#define x_dir 208
+#define z_flag 30
+#define z_dir 31
 
 
 int EnabledX = 0;

@@ -86,7 +86,7 @@ class XZStage:
         return iszmov
 
 
-    def move_to_x_y(self, x, z):
+    def move_to_x_z(self, x, z):
         x_t,z_t = x,z
         x = bytes(str(x), encoding="ascii")
         z = bytes(str(z), encoding="ascii")
@@ -129,92 +129,4 @@ class XZStage:
         # time.sleep(0.1)
         self.XZStage.write(bytes(b'off\n'))
         self.XZStage.close()
-        log.info('XZStage disconnected')
-
-
-
-
-
-
-
-
-
-
-            # self.motorx.move_to_position(self.motorx.get_device_unit_from_real_value(x, 0))
-            # self.motory.move_to_position(self.motory.get_device_unit_from_real_value(y, 0))
-            # while self.get_x_y_position() != (x, y):
-            #     time.sleep(0.1)
-            #     log.info('{}'.format(self.get_x_y_position()))
-            # log.info('Stage in position ({},{})'.format(x, y))
-        # except:
-        #     log.error('Could not load settings, moving anyway to {},{}'.format(x, y))
-        #     log.info('Moving to position ({},{})'.format(x, y))
-        #     self.motorx.move_to_position(self.from_mm_to_device_units(x))
-        #     self.motory.move_to_position(self.from_mm_to_device_units(y))
-        #     while self.get_x_y_position() != (x, y):
-        #         time.sleep(0.1)
-        #     log.info('Stage in position ({},{})'.format(x, y))
-
-
-
-
-    # def close(self):
-    #     self.motory.load_settings()
-    #     self.motorx.load_settings()
-    #     self.motorx.home()
-    #     self.motory.home()
-    #     self.motory.set_homing_velocity(54890604)
-    #     self.motory.set_homing_velocity(54890604)
-    #     self.motorx.home()
-    #     self.motory.home()
-    #     self.motorx.stop_polling()
-    #     self.motory.stop_polling()
-    #     self.motory.disconnect()
-    #     self.motorx.disconnect()
-    #     log.info('Stage of stepper motors DISCONNECTED')
-    #
-    # def get_vel_params(self):
-    #     self.motorx.load_settings()
-    #     self.motory.load_settings()
-    #     print(self.motorx.get_vel_params())
-    #     print(self.motory.get_vel_params())
-    #
-    # def set_vel_params(self, max_vel_x, accel_x, max_vel_y, accel_y):
-    #     self.motorx.load_settings()
-    #     self.motory.load_settings()
-    #     self.motorx.set_vel_params(max_vel_x, accel_x)
-    #     self.motory.set_vel_params(max_vel_y, accel_y)
-    #
-    # def from_device_units_to_mm(self, device_units):
-    #     return float('%.7f' % (4.9785334303194085e-07 * device_units - 3.6926158834568621e-12))
-    #
-    # def from_mm_to_device_units(self, mm):
-    #     return int(2008623.651917194 * mm + 7.4189049903691962e-06)
-    #
-    # def get_x_y_position(self):
-    #     pos_x = self.motorx.get_position()
-    #     x = float('%.4f' % (self.motorx.get_real_value_from_device_unit(pos_x, 'DISTANCE')))
-    #     pos_y = self.motory.get_position()
-    #     y = float('%.4f' % (self.motory.get_real_value_from_device_unit(pos_y, 'DISTANCE')))
-    #     return x, y
-    #
-    # def go_home(self):
-    #     self.motorx.start_polling(200)
-    #     self.motory.start_polling(200)
-    #     print('Homing both motors...')
-    #     self.motorx.home()
-    #     self.motory.home()
-    #     try:
-    #         self.wait(0, self.motorx)
-    #         self.wait(0, self.motory)
-    #         print('Homing done.')
-    #     except:
-    #         print('Homing anyway')
-#
-#
-
-
-
-
-
-
+        log.info('XZStage DISCONNECTED')
