@@ -41,7 +41,7 @@ class System():
     def scan_meander(self,x_array_scan,z_array_scan,num_avg):
         for x,z in self.meander_scan(x_array_scan,z_array_scan):
             self.stage.move_to_x_z(x,z)
-            self.intensity, self.wavelength = self.ccs.take_data(integration_time='15 ms', num_avg=num_avg, use_background=False)
+            self.intensity, self.wavelength = self.ccs.take_data(integration_time='20 ms', num_avg=num_avg, use_background=False)
             log.debug('Spectra measured in position: ({},{})\u03BCm'.format(self.stage.get_x(),self.stage.get_z()))
             self.step += 1
         log.info('FINISHED SCANNING.')
@@ -57,6 +57,20 @@ class System():
                     yield self.intensity
         ring = my_call()
         inten = list(ring)
+        with open('inten.csv', 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerows(inten)
+
+    def storage_thread_list(self,thread):
+        inten = []
+        wavel = []
+        i = self.step
+        while thread.is_alive():
+            if i != self.step:
+                inten.append(self.intensity)
+                #wavel.append(self.wavelength)
+                wavel.append(self.wavelength)
+                i = self.step
         with open('inten.csv', 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerows(inten)

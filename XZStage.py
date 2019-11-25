@@ -95,7 +95,6 @@ class XZStage:
         log.info('Target position: ({},{})\u03BCm'.format(self.get_x_target(),self.get_z_target()))
         while ((int(self.get_x()),int(self.get_z())) != (x_t,z_t)):
             log.debug('Actual position: ({},{})\u03BCm'.format(int(self.get_x()),int(self.get_z())))
-            # time.sleep(0.1)
         log.info('XZStage in position ({},{})\u03BCm'.format(self.get_x(),self.get_z()))
 
 
