@@ -16,15 +16,17 @@ dx = 50
 dz = 50
 x_array_scan = np.arange(0,dx*(1+1),dx)
 z_array_scan = np.arange(0,dz*(1+1),dz)
+
+
 BE_thread = threading.Thread(target=syst.scan_meander, args=(x_array_scan,z_array_scan,num_avg))
 BE_thread.start()
 storage_thread = threading.Thread(target = syst.storage_thread, args=(BE_thread,))
-BE_thread.join()
 storage_thread.start()
+BE_thread.join()
 BE_total_time = time.time() - initial_time
 log.info('MEASUREMENT Thread done, it took: {}.'.format(BE_total_time))
+storage_thread.join()
 storage_total_time = time.time() - initial_time
-# storage_thread.join()
 log.info('STORAGE Thread done, it took: {}.'.format(storage_total_time))
 syst.disconnect()
 elapsed_time = time.time() - initial_time

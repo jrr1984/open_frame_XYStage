@@ -1,4 +1,4 @@
-import time,csv, pickle, logging
+import time,csv, pickle, logging, threading
 from logging.handlers import SocketHandler
 from instrumental import instrument, list_instruments
 from XZStage import XZStage
@@ -7,11 +7,15 @@ log.setLevel(1)
 socket_handler = SocketHandler('127.0.0.1', 19996)
 log.addHandler(socket_handler)
 
-class System():
-    intensity = []
-    wavelength = []
-    step = 0
-    stop_program = False
+class System(threading.Thread):
+
+
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.intensity = []
+        self.wavelength = []
+        self.step = 0
+        self.stop_program = False
 
 
     def connect(self):
@@ -41,6 +45,7 @@ class System():
     def scan_meander(self,x_array_scan,z_array_scan,num_avg):
         for x,z in self.meander_scan(x_array_scan,z_array_scan):
             self.stage.move_to_x_z(x,z)
+            log.info(self.step)
             self.intensity, self.wavelength = self.ccs.take_data(integration_time='20 ms', num_avg=num_avg, use_background=False)
             log.debug('Spectra measured in position: ({},{})\u03BCm'.format(self.stage.get_x(),self.stage.get_z()))
             self.step += 1
@@ -53,24 +58,10 @@ class System():
             while thread.is_alive():
                 if i != self.step:
                     i = self.step
-                    #log.info('STEP: {}'.format(i))
+                    log.info('STEP: {}'.format(i))
                     yield self.intensity
         ring = my_call()
         inten = list(ring)
-        with open('inten.csv', 'w', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerows(inten)
-
-    def storage_thread_list(self,thread):
-        inten = []
-        wavel = []
-        i = self.step
-        while thread.is_alive():
-            if i != self.step:
-                inten.append(self.intensity)
-                #wavel.append(self.wavelength)
-                wavel.append(self.wavelength)
-                i = self.step
-        with open('inten.csv', 'w', newline='') as f:
+        with open('inten.dat', 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerows(inten)
