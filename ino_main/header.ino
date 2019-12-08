@@ -8,20 +8,20 @@
 
 char buffer[50];
 char * bufptr = buffer;
-unsigned long max_x_vel = 300;
-unsigned long x_accel = 500;
-unsigned long max_z_vel = 200;
-unsigned long z_accel = 400;
+unsigned long max_x_vel = 200;
+unsigned long x_accel = 400;
+unsigned long max_z_vel = 300;
+unsigned long z_accel = 500;
 
-#define XEnablePin 24
-#define ZEnablePin A8
+#define ZEnablePin 24
+#define XEnablePin A8
 #define Tpolling 200
 #define Tupdate 50
 const float steps_per_mum = 6.4;
-#define x_flag 207
-#define x_dir 208
-#define z_flag 30
-#define z_dir 31
+#define z_flag 207
+#define z_dir 208
+#define x_flag 30
+#define x_dir 31
 
 
 int EnabledX = 0;
@@ -53,8 +53,8 @@ const char string_18[] PROGMEM = "ISZMOV? -> Is z stepper moving?";
 PGM_P const helpString[] PROGMEM = { string_0, string_1, string_2, string_3, string_4, string_5,
                                      string_6, string_7, string_8, string_9, string_10, string_11,
                                      string_12, string_13, string_14, string_15, string_17, string_18};
-AccelStepper ZStepper(1, 46,48);
-AccelStepper XStepper(1, 26, 28);
+AccelStepper XStepper(1, 46,48);
+AccelStepper ZStepper(1, 26, 28);
 SerialCommand sCmd;
 
 void connect_to_stage(){

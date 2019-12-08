@@ -27,6 +27,9 @@ class System(threading.Thread):
         self.stage.set_stage()
 
 
+    def home_stage(self):
+        self.stage.move_to_x_z(0, 0)
+        log.info('XZStage is home.')
 
     def disconnect(self):
         self.ccs.close()
@@ -42,11 +45,10 @@ class System(threading.Thread):
                 for x in x_array_scan:
                     yield x, y
 
-    def scan_meander(self,x_array_scan,z_array_scan,num_avg):
+    def scan_meander(self,x_array_scan,z_array_scan,num_avg,integ_time):
         for x,z in self.meander_scan(x_array_scan,z_array_scan):
             self.stage.move_to_x_z(x,z)
-            log.info(self.step)
-            self.intensity, self.wavelength = self.ccs.take_data(integration_time='20 ms', num_avg=num_avg, use_background=False)
+            self.intensity, self.wavelength = self.ccs.take_data(integration_time=integ_time, num_avg=num_avg, use_background=False)
             log.debug('Spectra measured in position: ({},{})\u03BCm'.format(self.stage.get_x(),self.stage.get_z()))
             self.step += 1
         log.info('FINISHED SCANNING.')
@@ -58,7 +60,7 @@ class System(threading.Thread):
             while thread.is_alive():
                 if i != self.step:
                     i = self.step
-                    log.info('STEP: {}'.format(i))
+                    #log.info('STEP: {}'.format(i))
                     yield self.intensity
         ring = my_call()
         inten = list(ring)

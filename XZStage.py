@@ -92,7 +92,7 @@ class XZStage:
         z = bytes(str(z), encoding="ascii")
         self.XZStage.write(bytes(b'movx ' + x + b'\n'))
         self.XZStage.write(bytes(b'movz ' + z + b'\n'))
-        log.info('Target position: ({},{})\u03BCm'.format(self.get_x_target(),self.get_z_target()))
+        log.info('Target position: ({},{})\u03BCm'.format(x_t,z_t))
         while ((int(self.get_x()),int(self.get_z())) != (x_t,z_t)):
             log.debug('Actual position: ({},{})\u03BCm'.format(int(self.get_x()),int(self.get_z())))
         log.info('XZStage in position ({},{})\u03BCm'.format(self.get_x(),self.get_z()))
