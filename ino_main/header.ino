@@ -209,7 +209,7 @@ void home_x(){
 }
 
 
-void checkLimit(){               // --- CHECK THE LIMIT SWITCHES --- //
+void checkLimit(){
   if(!digitalRead(home_switch)){
             button_pressed = 1;    
             XStop();
@@ -220,7 +220,7 @@ void checkLimit(){               // --- CHECK THE LIMIT SWITCHES --- //
     if (button_pressed and digitalRead(home_switch)){
             XStop();
             XStepper.setCurrentPosition(0);
-            Serial.println("XMotor is at HOME position.");
+            //Serial.println("XMotor is at HOME position.");
             button_pressed = 0;
             }
 }
