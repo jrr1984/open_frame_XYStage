@@ -8,10 +8,13 @@
 
 char buffer[50];
 char * bufptr = buffer;
-unsigned long max_x_vel = 200;
-unsigned long x_accel = 400;
-unsigned long max_z_vel = 300;
-unsigned long z_accel = 500;
+unsigned long max_x_vel = 800;
+unsigned long x_accel = 1800;
+unsigned long max_z_vel = 600;
+unsigned long z_accel = 1400;
+unsigned int button_pressed = 0;
+int HomeSearch = 0;
+
 
 #define ZEnablePin 24
 #define XEnablePin A8
@@ -22,6 +25,7 @@ const float steps_per_mum = 6.4;
 #define z_dir 208
 #define x_flag 30
 #define x_dir 31
+#define home_switch A1
 
 
 int EnabledX = 0;
@@ -53,7 +57,7 @@ const char string_18[] PROGMEM = "ISZMOV? -> Is z stepper moving?";
 PGM_P const helpString[] PROGMEM = { string_0, string_1, string_2, string_3, string_4, string_5,
                                      string_6, string_7, string_8, string_9, string_10, string_11,
                                      string_12, string_13, string_14, string_15, string_17, string_18};
-AccelStepper XStepper(1, 46,48);
+AccelStepper XStepper(1, 46,48); //driver, step, direction
 AccelStepper ZStepper(1, 26, 28);
 SerialCommand sCmd;
 
@@ -65,6 +69,8 @@ void connect_to_stage(){
 
   pinMode(XEnablePin, OUTPUT);
   pinMode(ZEnablePin, OUTPUT);
+
+  pinMode(home_switch, INPUT_PULLUP);
   
   XStepper.setMaxSpeed(max_x_vel*32);
   XStepper.setAcceleration(x_accel*32);
@@ -100,13 +106,16 @@ void run_in_loop(){
     sCmd.readSerial();                          
     TPOld = TCurrent;                           
   }
-  if (TCurrent - TUOld > Tupdate){                                      
+  if (TCurrent - TUOld > Tupdate){
+    checkLimit();                                      
     TUOld = TCurrent;                            
     if(!XStepper.distanceToGo() && !ZStepper.distanceToGo()){                 
       motion_complete();}                         
   }
   XStepper.run();                                
-  ZStepper.run();                               
+  ZStepper.run();
+  //if(HomeSearch) {HomeSearch = home_x(HomeSearch);}
+  
 }
 
 void help(){                                 
@@ -114,6 +123,7 @@ void help(){
     strcpy_P(bufptr, (char*)pgm_read_word(&(helpString[i])));
     Serial.println(buffer); }
 }
+
 
 void get_x(){        
   Serial.println(steps_to_position(XStepper.currentPosition()), 2);
@@ -131,7 +141,7 @@ void get_x_z(){
 void motion_complete(){             
   if (XMoving){                                         // Recently moving?
       if (XMoveAbs){                                    // Check if hysteresis correction is pending
-        XStepper.move(15*32);                    // ... correct hysteresis
+        XStepper.move(5*32);                    // ... correct hysteresis
         XMoveAbs = 0;                                   // ... and reset hysteresis variable
       }
       else {
@@ -147,7 +157,7 @@ void motion_complete(){
   }
   if (ZMoving){                                         // Recently moving?
       if (ZMoveAbs){                                    // Check if hysteresis correction is pending
-        ZStepper.move(15*32);
+        ZStepper.move(5*32);
         ZMoveAbs = 0;                                   // ... and reset hysteresis variable
       }
       else {
@@ -192,6 +202,29 @@ void start_movez(){
   digitalWrite(ZEnablePin,LOW);
   ZMoving = 1;
 }
+
+void home_x(){
+  start_movex();
+  XStepper.moveTo(-10000);
+}
+
+
+void checkLimit(){               // --- CHECK THE LIMIT SWITCHES --- //
+  if(!digitalRead(home_switch)){
+            button_pressed = 1;    
+            XStop();
+            start_movex();
+            XStepper.moveTo(XStepper.currentPosition() + 32); 
+            XMoveAbs = 1;
+            }
+    if (button_pressed and digitalRead(home_switch)){
+            XStop();
+            XStepper.setCurrentPosition(0);
+            Serial.println("XMotor is at HOME position.");
+            button_pressed = 0;
+            }
+}
+
   
 
 
@@ -268,17 +301,16 @@ void move_to_x(){
   char *arg;
   arg = sCmd.next();            
   if (arg != NULL) {            
-    float Pos = atof(arg);      
-    long Steps = position_to_steps(Pos);
-    start_movex();
-    if (XStepper.currentPosition() > Steps){ 
-      XStepper.moveTo(Steps - (15*32)); 
-      XMoveAbs = 1;
-    }
-    else {
-    XStepper.moveTo(Steps);                
-    }
-  }              
+      float Pos = atof(arg);      
+      long Steps = position_to_steps(Pos);
+        start_movex();
+        if (XStepper.currentPosition() > Steps){ 
+          XStepper.moveTo(Steps - (5*32)); 
+          XMoveAbs = 1;
+        }
+        else {
+          XStepper.moveTo(Steps);                
+        }}              
 }
 
 void move_to_z(){             
@@ -289,7 +321,7 @@ void move_to_z(){
     long Steps = position_to_steps(Pos);
     start_movez();                      
     if (ZStepper.currentPosition() > Steps){ 
-      ZStepper.moveTo(Steps - (15*32)); 
+      ZStepper.moveTo(Steps - (5*32)); 
       ZMoveAbs = 1;                     
     }
     else {
@@ -330,6 +362,18 @@ void unrecognized(const char * command) {
   Serial.println("'");
 }
 
+
+
+void XStop(){                     // --- STOP STEPPER MOTION --- //
+  XStepper.stop();                          // Stop
+  XMoveAbs = 0;                             // Stop does not require hysteresis correction
+}
+
+void ZStop(){                     // --- STOP STEPPER MOTION --- //
+  ZStepper.stop();                          // Stop
+  ZMoveAbs = 0;                             // Stop does not require hysteresis correction
+}
+
 void comm_interface(){
   
   sCmd.addCommand("help", help);
@@ -365,6 +409,14 @@ void comm_interface(){
   sCmd.addCommand("isxmov", is_x_moving);
 
   sCmd.addCommand("iszmov", is_z_moving);
+
+  sCmd.addCommand("xstop", XStop);
+
+  sCmd.addCommand("xhome", home_x);
+
+  sCmd.addCommand("zstop", ZStop);
+
+  sCmd.addCommand("help", help);
   sCmd.addCommand("xtarg", get_x_target);
   sCmd.addCommand("ztarg", get_z_target);
 

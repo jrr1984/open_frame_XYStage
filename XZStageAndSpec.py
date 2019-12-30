@@ -1,4 +1,4 @@
-import time,csv, pickle, logging, threading
+import time,csv, logging, threading
 from logging.handlers import SocketHandler
 from instrumental import instrument, list_instruments
 from XZStage import XZStage
@@ -6,6 +6,7 @@ log = logging.getLogger('Root logger')
 log.setLevel(1)
 socket_handler = SocketHandler('127.0.0.1', 19996)
 log.addHandler(socket_handler)
+
 
 class System(threading.Thread):
 
@@ -67,3 +68,6 @@ class System(threading.Thread):
         with open('inten.dat', 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerows(inten)
+
+
+
