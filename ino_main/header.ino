@@ -12,20 +12,21 @@ unsigned long max_x_vel = 800;
 unsigned long x_accel = 1800;
 unsigned long max_z_vel = 600;
 unsigned long z_accel = 1400;
-unsigned int button_pressed = 0;
-int HomeSearch = 0;
+unsigned int xbutton_pressed = 0;
+unsigned int zbutton_pressed = 0;
 
 
 #define ZEnablePin 24
 #define XEnablePin A8
 #define Tpolling 200
 #define Tupdate 50
-const float steps_per_mum = 6.4;
+const float steps_per_mum = 6.405711 ; //6.4 teorico
 #define z_flag 207
 #define z_dir 208
 #define x_flag 30
 #define x_dir 31
-#define home_switch A1
+#define xhome_switch A1
+#define zhome_switch 34
 
 
 int EnabledX = 0;
@@ -70,7 +71,8 @@ void connect_to_stage(){
   pinMode(XEnablePin, OUTPUT);
   pinMode(ZEnablePin, OUTPUT);
 
-  pinMode(home_switch, INPUT_PULLUP);
+  pinMode(xhome_switch, INPUT_PULLUP);
+  pinMode(zhome_switch, INPUT_PULLUP);
   
   XStepper.setMaxSpeed(max_x_vel*32);
   XStepper.setAcceleration(x_accel*32);
@@ -114,7 +116,6 @@ void run_in_loop(){
   }
   XStepper.run();                                
   ZStepper.run();
-  //if(HomeSearch) {HomeSearch = home_x(HomeSearch);}
   
 }
 
@@ -208,20 +209,36 @@ void home_x(){
   XStepper.moveTo(-10000);
 }
 
+void home_z(){
+  start_movez();
+  ZStepper.moveTo(-10000);
+}
+
 
 void checkLimit(){
-  if(!digitalRead(home_switch)){
-            button_pressed = 1;    
+  if(!digitalRead(xhome_switch)){
+            xbutton_pressed = 1;    
             XStop();
             start_movex();
             XStepper.moveTo(XStepper.currentPosition() + 32); 
             XMoveAbs = 1;
             }
-    if (button_pressed and digitalRead(home_switch)){
+    if (xbutton_pressed and digitalRead(xhome_switch)){
             XStop();
             XStepper.setCurrentPosition(0);
-            //Serial.println("XMotor is at HOME position.");
-            button_pressed = 0;
+            xbutton_pressed = 0;
+            }
+    if(!digitalRead(zhome_switch)){
+            zbutton_pressed = 1;    
+            ZStop();
+            start_movez();
+            ZStepper.moveTo(ZStepper.currentPosition() + 32); 
+            ZMoveAbs = 1;
+            }
+    if (zbutton_pressed and digitalRead(zhome_switch)){
+            ZStop();
+            ZStepper.setCurrentPosition(0);
+            zbutton_pressed = 0;
             }
 }
 
@@ -413,6 +430,8 @@ void comm_interface(){
   sCmd.addCommand("xstop", XStop);
 
   sCmd.addCommand("xhome", home_x);
+  
+  sCmd.addCommand("zhome", home_z);
 
   sCmd.addCommand("zstop", ZStop);
 

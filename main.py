@@ -22,11 +22,11 @@ i = syst.step
 
 num_avg=3
 
-integ_time = '25 ms'
-dx = 100
-dz = 100
-x_array_scan = np.arange(0,dx*(1+1),dx)
-z_array_scan = np.arange(0,dz*(1+1),dz)
+integ_time = '5 ms'
+dx = 50
+dz = 50
+x_array_scan = np.arange(0,3000,dx)
+z_array_scan = np.arange(0,3000,dz)
 
 
 BE_thread = threading.Thread(target=syst.scan_meander, args=(x_array_scan,z_array_scan,num_avg,integ_time))
