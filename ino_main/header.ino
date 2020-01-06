@@ -20,7 +20,8 @@ unsigned int zbutton_pressed = 0;
 #define XEnablePin A8
 #define Tpolling 200
 #define Tupdate 50
-const float steps_per_mum = 6.405711 ; //6.4 teorico
+const double xsteps_per_mum = 6.405711759 ; //6.4 teorico
+const double zsteps_per_mum = 6.382501902 ; //6.4 teorico
 #define z_flag 207
 #define z_dir 208
 #define x_flag 30
@@ -127,16 +128,16 @@ void help(){
 
 
 void get_x(){        
-  Serial.println(steps_to_position(XStepper.currentPosition()), 2);
+  Serial.println(xsteps_to_position(XStepper.currentPosition()), 2);
 }
 
 void get_z(){        
-  Serial.println(steps_to_position(ZStepper.currentPosition()), 2);
+  Serial.println(zsteps_to_position(ZStepper.currentPosition()), 2);
 }
 
 void get_x_z(){        
-  Serial.println(steps_to_position(XStepper.currentPosition()), 2);
-  Serial.println(steps_to_position(ZStepper.currentPosition()), 2);
+  Serial.println(xsteps_to_position(XStepper.currentPosition()), 2);
+  Serial.println(zsteps_to_position(ZStepper.currentPosition()), 2);
 }          
 
 void motion_complete(){             
@@ -246,11 +247,11 @@ void checkLimit(){
 
 
 void get_x_target(){        
-  Serial.println(steps_to_position(XStepper.targetPosition()), 2 );
+  Serial.println(xsteps_to_position(XStepper.targetPosition()), 2 );
 }
 
 void get_z_target(){        
-  Serial.println(steps_to_position(ZStepper.targetPosition()), 2 );
+  Serial.println(zsteps_to_position(ZStepper.targetPosition()), 2 );
 }
 
 void set_x_acceleration(){          
@@ -319,7 +320,7 @@ void move_to_x(){
   arg = sCmd.next();            
   if (arg != NULL) {            
       float Pos = atof(arg);      
-      long Steps = position_to_steps(Pos);
+      long Steps = xposition_to_steps(Pos);
         start_movex();
         if (XStepper.currentPosition() > Steps){ 
           XStepper.moveTo(Steps - (5*32)); 
@@ -335,7 +336,7 @@ void move_to_z(){
   arg = sCmd.next();            
   if (arg != NULL) {            
     float Pos = atof(arg);      
-    long Steps = position_to_steps(Pos);
+    long Steps = zposition_to_steps(Pos);
     start_movez();                      
     if (ZStepper.currentPosition() > Steps){ 
       ZStepper.moveTo(Steps - (5*32)); 
@@ -365,12 +366,19 @@ void is_z_moving(){
   }
 }
 
-long position_to_steps(float pos){         
-  return (round(pos * steps_per_mum));
+long xposition_to_steps(float pos){         
+  return (round(pos * xsteps_per_mum));
 }
 
-float steps_to_position(long steps){      
-  return ((float)(steps / (steps_per_mum))); 
+long zposition_to_steps(float pos){         
+  return (round(pos * xsteps_per_mum));
+}
+
+float xsteps_to_position(long steps){      
+  return ((float)(steps / (xsteps_per_mum))); 
+}
+float zsteps_to_position(long steps){      
+  return ((float)(steps / (zsteps_per_mum))); 
 }
 
 void unrecognized(const char * command) {   
