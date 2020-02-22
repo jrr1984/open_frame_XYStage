@@ -8,27 +8,33 @@
 
 char buffer[50];
 char * bufptr = buffer;
-unsigned long max_x_vel = 800;
-unsigned long x_accel = 1800;
-unsigned long max_z_vel = 600;
-unsigned long z_accel = 1400;
+unsigned long max_x_vel = 800;  
+unsigned long x_accel = 1800; 
+unsigned long max_z_vel = 800;
+unsigned long z_accel = 1800;
 unsigned int xbutton_pressed = 0;
 unsigned int zbutton_pressed = 0;
 
 
 #define ZEnablePin 24
 #define XEnablePin A8
-#define Tpolling 200
+#define Tpolling 200  
 #define Tupdate 50
-const double xsteps_per_mum = 6.405711759 ; //6.4 teorico
-const double zsteps_per_mum = 6.382501902 ; //6.4 teorico
+const double xsteps_per_mum = 3.2; 
+const double zsteps_per_mum = 3.2;
 #define z_flag 207
 #define z_dir 208
 #define x_flag 30
 #define x_dir 31
-#define xhome_switch A1
-#define zhome_switch 34
+#define xhome_switch 2
+#define zhome_switch 3 //34
 
+
+#define x_joystick A0
+#define z_joystick A1
+#define button_joystick 10
+
+int x_read,z_read,x_pos,z_pos,button_joystick_read;
 
 int EnabledX = 0;
 int EnabledZ = 0;
@@ -63,6 +69,8 @@ AccelStepper XStepper(1, 46,48); //driver, step, direction
 AccelStepper ZStepper(1, 26, 28);
 SerialCommand sCmd;
 
+void checkLimit();
+
 void connect_to_stage(){
   pinMode(26,OUTPUT);
   pinMode(28,OUTPUT);
@@ -74,14 +82,16 @@ void connect_to_stage(){
 
   pinMode(xhome_switch, INPUT_PULLUP);
   pinMode(zhome_switch, INPUT_PULLUP);
+
+  pinMode(button_joystick,INPUT_PULLUP);
   
   XStepper.setMaxSpeed(max_x_vel*32);
   XStepper.setAcceleration(x_accel*32);
   ZStepper.setMaxSpeed(max_z_vel*32);
   ZStepper.setAcceleration(z_accel*32);
 
-  digitalWrite(XEnablePin, !EnabledX);
-  digitalWrite(ZEnablePin, !EnabledZ);
+  digitalWrite(XEnablePin, EnabledX);
+  digitalWrite(ZEnablePin, EnabledZ);
 
   if (EEPROM.read(x_flag)) {    
     long x_steps;
@@ -127,6 +137,21 @@ void help(){
 }
 
 
+long xposition_to_steps(float pos){         
+  return (round(pos * xsteps_per_mum));
+}
+
+long zposition_to_steps(float pos){         
+  return (round(pos * zsteps_per_mum));
+}
+
+float xsteps_to_position(long steps){      
+  return ((float)(steps / (xsteps_per_mum))); 
+}
+float zsteps_to_position(long steps){      
+  return ((float)(steps / (zsteps_per_mum))); 
+}
+
 void get_x(){        
   Serial.println(xsteps_to_position(XStepper.currentPosition()), 2);
 }
@@ -143,13 +168,13 @@ void get_x_z(){
 void motion_complete(){             
   if (XMoving){                                         // Recently moving?
       if (XMoveAbs){                                    // Check if hysteresis correction is pending
-        XStepper.move(5*32);                    // ... correct hysteresis
+        //XStepper.move(1);                    // ... correct hysteresis
         XMoveAbs = 0;                                   // ... and reset hysteresis variable
       }
       else {
         XMoving +=1;
         if(XMoving == 10){                              // 10 * TUpdate (0.5 sec.) after a move
-          digitalWrite(XEnablePin, !(EnabledX=0));      // ... disable motor
+          //digitalWrite(XEnablePin, !(EnabledX=0));      // ... disable motor
           }
         else if(XMoving == 800){                        // 100 * (5 sec.) after a move
           EEPROM_writeAnything(x_dir, XStepper.currentPosition());   // Save position to EEPROM
@@ -159,21 +184,20 @@ void motion_complete(){
   }
   if (ZMoving){                                         // Recently moving?
       if (ZMoveAbs){                                    // Check if hysteresis correction is pending
-        ZStepper.move(5*32);
+        //ZStepper.move(1);
         ZMoveAbs = 0;                                   // ... and reset hysteresis variable
       }
-      else {
+      else 
         ZMoving +=1;
         if(ZMoving == 10){                              // 10 * TUpdate (0.5 sec.) after a move
-          digitalWrite(ZEnablePin, !(EnabledZ=0));      // ... disable motor
+          //digitalWrite(ZEnablePin, !(EnabledZ=0));      // ... disable motor
           }
         else if(ZMoving == 800){                        // 100 * (5 sec.) after a move
           EEPROM_writeAnything(z_dir, ZStepper.currentPosition());
           EEPROM.write(z_flag, true);              // ... and set EEPROM flag
           ZMoving = 0; }                                // ... and reset the moving variable
       }
-  }
-}
+ }
 
 void turn_on(){
   digitalWrite(XEnablePin,LOW);
@@ -195,13 +219,13 @@ void turn_off(){
 
 void start_movex(){
   EEPROM.write(x_flag, false);
-  digitalWrite(XEnablePin,LOW);
+  //digitalWrite(XEnablePin,LOW);
   XMoving = 1;
 }
 
 void start_movez(){
   EEPROM.write(z_flag, false);
-  digitalWrite(ZEnablePin,LOW);
+  //digitalWrite(ZEnablePin,LOW);
   ZMoving = 1;
 }
 
@@ -217,30 +241,31 @@ void home_z(){
 
 
 void checkLimit(){
-  if(!digitalRead(xhome_switch)){
+   if(digitalRead(xhome_switch)){
             xbutton_pressed = 1;    
-            XStop();
-            start_movex();
-            XStepper.moveTo(XStepper.currentPosition() + 32); 
-            XMoveAbs = 1;
-            }
-    if (xbutton_pressed and digitalRead(xhome_switch)){
-            XStop();
-            XStepper.setCurrentPosition(0);
-            xbutton_pressed = 0;
-            }
-    if(!digitalRead(zhome_switch)){
-            zbutton_pressed = 1;    
             ZStop();
             start_movez();
-            ZStepper.moveTo(ZStepper.currentPosition() + 32); 
+            ZStepper.moveTo(ZStepper.currentPosition() - 320); 
             ZMoveAbs = 1;
             }
-    if (zbutton_pressed and digitalRead(zhome_switch)){
+    if (xbutton_pressed and (!digitalRead(xhome_switch))){
+            ZStop();
+            ZStepper.setCurrentPosition(0);
+            xbutton_pressed = 0;
+            }
+    if(digitalRead(zhome_switch)){
+            zbutton_pressed = 1;    
+            ZStop() ;
+            start_movez();
+            ZStepper.moveTo(ZStepper.currentPosition() + 320); 
+            ZMoveAbs = 1;
+            }
+    if (zbutton_pressed and (!digitalRead(zhome_switch))){
             ZStop();
             ZStepper.setCurrentPosition(0);
             zbutton_pressed = 0;
-            }
+            } 
+
 }
 
   
@@ -274,6 +299,22 @@ void set_z_acceleration(){
   get_z_acceleration();            
 }
 
+void set_origin(){
+  ZStepper.setCurrentPosition(0);
+  XStepper.setCurrentPosition(0);
+  EEPROM.write(x_flag, false);
+  EEPROM.write(z_flag, false);
+  if (!EEPROM.read(x_flag)){           
+    EEPROM_writeAnything(x_dir, XStepper.currentPosition());
+    EEPROM.write(x_flag, true);
+    }
+   if (!EEPROM.read(z_flag)){
+    EEPROM_writeAnything(z_dir, ZStepper.currentPosition());
+    EEPROM.write(z_flag, true);
+   }
+}
+
+
 void get_x_acceleration(){         
   Serial.println(x_accel);         
 }
@@ -295,6 +336,10 @@ void set_max_x_vel(){
     XStepper.setMaxSpeed(max_x_vel);
   }
   get_max_x_vel();
+}
+void move_steps(){
+
+  
 }
 
 
@@ -323,13 +368,15 @@ void move_to_x(){
       long Steps = xposition_to_steps(Pos);
         start_movex();
         if (XStepper.currentPosition() > Steps){ 
-          XStepper.moveTo(Steps - (5*32)); 
+          XStepper.moveTo(Steps); 
           XMoveAbs = 1;
         }
         else {
           XStepper.moveTo(Steps);                
         }}              
 }
+
+
 
 void move_to_z(){             
   char *arg;
@@ -339,7 +386,7 @@ void move_to_z(){
     long Steps = zposition_to_steps(Pos);
     start_movez();                      
     if (ZStepper.currentPosition() > Steps){ 
-      ZStepper.moveTo(Steps - (5*32)); 
+      ZStepper.moveTo(Steps); 
       ZMoveAbs = 1;                     
     }
     else {
@@ -366,20 +413,7 @@ void is_z_moving(){
   }
 }
 
-long xposition_to_steps(float pos){         
-  return (round(pos * xsteps_per_mum));
-}
 
-long zposition_to_steps(float pos){         
-  return (round(pos * xsteps_per_mum));
-}
-
-float xsteps_to_position(long steps){      
-  return ((float)(steps / (xsteps_per_mum))); 
-}
-float zsteps_to_position(long steps){      
-  return ((float)(steps / (zsteps_per_mum))); 
-}
 
 void unrecognized(const char * command) {   
   Serial.print("I don't understand the command '");
@@ -397,6 +431,50 @@ void XStop(){                     // --- STOP STEPPER MOTION --- //
 void ZStop(){                     // --- STOP STEPPER MOTION --- //
   ZStepper.stop();                          // Stop
   ZMoveAbs = 0;                             // Stop does not require hysteresis correction
+}
+
+void move_rel_in_x(int Pos){      
+      start_movex();
+      XStepper.move(Pos); 
+      XMoveAbs = 1;              
+}
+
+void move_rel_in_z(int Pos){      
+      start_movez();
+      ZStepper.move(Pos); 
+      ZMoveAbs = 1;              
+}
+
+void joystick(){  
+  x_read = analogRead(x_joystick);
+  z_read = analogRead(z_joystick);
+  button_joystick_read = digitalRead(button_joystick);
+  if(x_read >= 0 && x_read < 492){ //20 menos que la mitad de 1024
+    x_pos = map(x_read,0,492,-1000,0);
+    move_rel_in_x(x_pos);
+  }
+  else if(x_read >= 532 && x_read < 1023){
+    x_pos = map(x_read,532,1023,0,1000);
+    move_rel_in_x(x_pos);
+  }
+  else{
+    XStop();
+  }
+
+  if(z_read >= 0 && z_read < 492){ //20 menos que la mitad de 1024
+    z_pos = map(z_read,0,492,-1000,0);
+    move_rel_in_z(z_pos);
+  }
+  else if(z_read >= 532 && z_read < 1023){
+    z_pos = map(z_read,532,1023,0,1000);
+    move_rel_in_z(z_pos);
+  }
+  else{
+    ZStop();
+  }
+  if 
+
+  
 }
 
 void comm_interface(){
@@ -427,7 +505,7 @@ void comm_interface(){
 
   sCmd.addCommand("wmaxxvel", get_max_z_vel);
 
-  sCmd.addCommand("movx", move_to_x);
+  sCmd.addCommand("movx", move_to_x);   
 
   sCmd.addCommand("movz", move_to_z);
 
@@ -442,6 +520,8 @@ void comm_interface(){
   sCmd.addCommand("zhome", home_z);
 
   sCmd.addCommand("zstop", ZStop);
+    
+  sCmd.addCommand("set0",set_origin);
 
   sCmd.addCommand("help", help);
   sCmd.addCommand("xtarg", get_x_target);

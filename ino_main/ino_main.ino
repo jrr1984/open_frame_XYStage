@@ -2,8 +2,7 @@ void setup()
 { 
   Serial.begin(115200);
   connect_to_stage();
-  comm_interface();
-  
+  comm_interface(); 
 }
 
 void loop()

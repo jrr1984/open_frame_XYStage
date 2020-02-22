@@ -93,9 +93,20 @@ class XZStage:
         self.XZStage.write(bytes(b'movx ' + x + b'\n'))
         self.XZStage.write(bytes(b'movz ' + z + b'\n'))
         log.info('Target position: ({},{})\u03BCm'.format(x_t,z_t))
-        while ((int(self.get_x()),int(self.get_z())) != (x_t,z_t)):
-            log.debug('Actual position: ({},{})\u03BCm'.format(int(self.get_x()),int(self.get_z())))
-        log.info('XZStage in position ({},{})\u03BCm'.format(self.get_x(),self.get_z()))
+        while ((self.is_x_moving()==1) or (self.is_z_moving() ==1)):
+            log.debug('Still moving')
+            #log.debug('Actual position: ({},{})\u03BCm'.format(float(self.get_x()),float(self.get_z())))
+        log.info('Position achieved correctly.')
+        #log.info('XZStage in position ({},{})\u03BCm'.format(self.get_x(),self.get_z()))
+
+    def move_continous_to_x_z(self,x,z):
+        x_t,z_t = x,z
+        x = bytes(str(x), encoding="ascii")
+        z = bytes(str(z), encoding="ascii")
+        self.XZStage.write(bytes(b'movx ' + x + b'\n'))
+        self.XZStage.write(bytes(b'movz ' + z + b'\n'))
+        log.info('Target position: ({},{})\u03BCm'.format(x_t,z_t))
+
 
 
     def get_x(self):
