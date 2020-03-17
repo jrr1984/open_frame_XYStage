@@ -8,10 +8,10 @@
 
 char buffer[50];
 char * bufptr = buffer;
-unsigned long max_x_vel = 800;  
-unsigned long x_accel = 1800; 
-unsigned long max_z_vel = 800;
-unsigned long z_accel = 1800;
+unsigned long max_x_vel = 1200;  
+unsigned long x_accel = 2000; 
+unsigned long max_z_vel = 1200;
+unsigned long z_accel = 2000;
 unsigned int xbutton_pressed = 0;
 unsigned int zbutton_pressed = 0;
 
@@ -30,12 +30,11 @@ const double zsteps_per_mum = 3.2;
 #define zhome_switch 3 //34
 
 
-#define x_joystick A0
-#define z_joystick A1
-#define button_joystick 10
+#define x_joystick A5
+#define z_joystick A10
 
-int x_read,z_read,x_pos,z_pos,button_joystick_read;
 
+int x_read,z_read,x_pos,z_pos;
 int EnabledX = 0;
 int EnabledZ = 0;
 int XMoving = 0, XMoveAbs = 0;
@@ -83,7 +82,6 @@ void connect_to_stage(){
   pinMode(xhome_switch, INPUT_PULLUP);
   pinMode(zhome_switch, INPUT_PULLUP);
 
-  pinMode(button_joystick,INPUT_PULLUP);
   
   XStepper.setMaxSpeed(max_x_vel*32);
   XStepper.setAcceleration(x_accel*32);
@@ -107,7 +105,7 @@ void connect_to_stage(){
     get_z();
   }
   TPOld = millis() - Tpolling/2;                  // Asynchronous polling 
-  TUOld = TPOld - Tupdate/2;                      // and update
+  TUOld = TPOld - Tupdate/2;                      // and update 
 }
 
 
@@ -120,7 +118,8 @@ void run_in_loop(){
     TPOld = TCurrent;                           
   }
   if (TCurrent - TUOld > Tupdate){
-    checkLimit();                                      
+    checkLimit();
+    //joystick();                                      
     TUOld = TCurrent;                            
     if(!XStepper.distanceToGo() && !ZStepper.distanceToGo()){                 
       motion_complete();}                         
@@ -168,7 +167,7 @@ void get_x_z(){
 void motion_complete(){             
   if (XMoving){                                         // Recently moving?
       if (XMoveAbs){                                    // Check if hysteresis correction is pending
-        //XStepper.move(1);                    // ... correct hysteresis
+        //XStepper.move(32*3);                    // ... correct hysteresis
         XMoveAbs = 0;                                   // ... and reset hysteresis variable
       }
       else {
@@ -184,7 +183,7 @@ void motion_complete(){
   }
   if (ZMoving){                                         // Recently moving?
       if (ZMoveAbs){                                    // Check if hysteresis correction is pending
-        //ZStepper.move(1);
+        //ZStepper.move(32*3);
         ZMoveAbs = 0;                                   // ... and reset hysteresis variable
       }
       else 
@@ -243,26 +242,26 @@ void home_z(){
 void checkLimit(){
    if(digitalRead(xhome_switch)){
             xbutton_pressed = 1;    
-            ZStop();
-            start_movez();
-            ZStepper.moveTo(ZStepper.currentPosition() - 320); 
-            ZMoveAbs = 1;
+            XStop();
+            start_movex();
+            XStepper.moveTo(XStepper.currentPosition() + 320); 
+            XMoveAbs = 1;
             }
     if (xbutton_pressed and (!digitalRead(xhome_switch))){
-            ZStop();
-            ZStepper.setCurrentPosition(0);
+            XStop();
+            XStepper.setCurrentPosition(0);
             xbutton_pressed = 0;
             }
     if(digitalRead(zhome_switch)){
             zbutton_pressed = 1;    
-            ZStop() ;
-            start_movez();
-            ZStepper.moveTo(ZStepper.currentPosition() + 320); 
-            ZMoveAbs = 1;
+            XStop() ;
+            start_movex();
+            XStepper.moveTo(XStepper.currentPosition() - 320); 
+            XMoveAbs = 1;
             }
     if (zbutton_pressed and (!digitalRead(zhome_switch))){
-            ZStop();
-            ZStepper.setCurrentPosition(0);
+            XStop();
+            XStepper.setCurrentPosition(0);
             zbutton_pressed = 0;
             } 
 
@@ -366,14 +365,10 @@ void move_to_x(){
   if (arg != NULL) {            
       float Pos = atof(arg);      
       long Steps = xposition_to_steps(Pos);
-        start_movex();
-        if (XStepper.currentPosition() > Steps){ 
-          XStepper.moveTo(Steps); 
-          XMoveAbs = 1;
-        }
-        else {
-          XStepper.moveTo(Steps);                
-        }}              
+      start_movex();
+      XStepper.moveTo(Steps); 
+      XMoveAbs = 1;
+  }              
 }
 
 
@@ -385,13 +380,8 @@ void move_to_z(){
     float Pos = atof(arg);      
     long Steps = zposition_to_steps(Pos);
     start_movez();                      
-    if (ZStepper.currentPosition() > Steps){ 
-      ZStepper.moveTo(Steps); 
-      ZMoveAbs = 1;                     
-    }
-    else {
-    ZStepper.moveTo(Steps);             
-    }
+    ZStepper.moveTo(Steps); 
+    ZMoveAbs = 1;                    
   }
 }
 
@@ -448,34 +438,32 @@ void move_rel_in_z(int Pos){
 void joystick(){  
   x_read = analogRead(x_joystick);
   z_read = analogRead(z_joystick);
-  button_joystick_read = digitalRead(button_joystick);
-  if(x_read >= 0 && x_read < 492){ //20 menos que la mitad de 1024
-    x_pos = map(x_read,0,492,-1000,0);
+  if(x_read >= 0 && x_read < 300){
+    x_pos = map(x_read,0,300,-10,0);
     move_rel_in_x(x_pos);
   }
-  else if(x_read >= 532 && x_read < 1023){
-    x_pos = map(x_read,532,1023,0,1000);
+  else if(x_read >= 700 && x_read < 1024){
+    x_pos = map(x_read,700,1024,0,10);
     move_rel_in_x(x_pos);
+
   }
   else{
     XStop();
   }
 
-  if(z_read >= 0 && z_read < 492){ //20 menos que la mitad de 1024
-    z_pos = map(z_read,0,492,-1000,0);
+  if(z_read >= 0 && z_read < 300){
+    z_pos = map(z_read,0,300,-50,0);
     move_rel_in_z(z_pos);
   }
-  else if(z_read >= 532 && z_read < 1023){
-    z_pos = map(z_read,532,1023,0,1000);
+  else if(z_read >= 700 && z_read < 1024){
+    z_pos = map(z_read,700,1023,0,50);
     move_rel_in_z(z_pos);
   }
   else{
     ZStop();
   }
-  if 
-
-  
 }
+
 
 void comm_interface(){
   

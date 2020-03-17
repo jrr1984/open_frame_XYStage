@@ -46,12 +46,12 @@ class System(threading.Thread):
         self.stage.turn_off()
 
     def meander_scan(self, x_array_scan, y_array_scan):
-        for ndx, y in enumerate(y_array_scan):
+        for ndx, y in enumerate(x_array_scan):
             if ndx % 2:
-                for x in reversed(x_array_scan):
+                for x in reversed(y_array_scan):
                     yield x, y
             else:
-                for x in x_array_scan:
+                for x in y_array_scan:
                     yield x, y
 
     def continous_measurement(self,x,z,num_avg,integ_time):
@@ -84,17 +84,5 @@ class System(threading.Thread):
         with open('inten.dat', 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerows(inten)
-
-    # def live_plot_thread(self,thread):
-    #     while thread.is_alive():
-    #                 log.debug('trying to plot')
-    #                 log.debug(len(self.inten_live_plot))
-    #                 print(self.inten_live_plot[self.step])
-    #                 plt.plot(wavel_array, self.inten_live_plot[i])
-                    # plt.xlabel('Longitud de onda [nm]', fontsize=15)
-                    # plt.ylabel('Intensidad [a.u.]', fontsize=15)
-                    # plt.grid()
-                    # plt.show()
-
 
 
