@@ -25,10 +25,10 @@ syst.connect()
 num_avg=2
 
 integ_time = '100 ms'
-dx = 5
-dz = 5
-x_array_scan = np.arange(0,100,dx)
-z_array_scan = np.arange(0,100,dz)
+dx = 1
+dz = 2
+x_array_scan = np.arange(0,70,dx)
+z_array_scan = np.arange(0,2,dz)
 
 BE_thread = threading.Thread(target=syst.scan_meander, args=(x_array_scan,z_array_scan,num_avg,integ_time))
 BE_thread.start()

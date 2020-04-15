@@ -46,12 +46,12 @@ class System(threading.Thread):
         self.stage.turn_off()
 
     def meander_scan(self, x_array_scan, y_array_scan):
-        for ndx, y in enumerate(x_array_scan):
+        for ndx, y in enumerate(y_array_scan):
             if ndx % 2:
-                for x in reversed(y_array_scan):
+                for x in reversed(x_array_scan):
                     yield x, y
             else:
-                for x in y_array_scan:
+                for x in x_array_scan:
                     yield x, y
 
     def continous_measurement(self,x,z,num_avg,integ_time):

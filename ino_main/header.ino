@@ -30,8 +30,8 @@ const double zsteps_per_mum = 3.2;
 #define zhome_switch 3 //34
 
 
-#define x_joystick A5
-#define z_joystick A10
+#define x_joystick A10
+#define z_joystick A5
 
 
 int x_read,z_read,x_pos,z_pos;
@@ -119,7 +119,7 @@ void run_in_loop(){
   }
   if (TCurrent - TUOld > Tupdate){
     checkLimit();
-    //joystick();                                      
+    ///joystick();                                      
     TUOld = TCurrent;                            
     if(!XStepper.distanceToGo() && !ZStepper.distanceToGo()){                 
       motion_complete();}                         
@@ -186,7 +186,7 @@ void motion_complete(){
         //ZStepper.move(32*3);
         ZMoveAbs = 0;                                   // ... and reset hysteresis variable
       }
-      else 
+      else{ 
         ZMoving +=1;
         if(ZMoving == 10){                              // 10 * TUpdate (0.5 sec.) after a move
           //digitalWrite(ZEnablePin, !(EnabledZ=0));      // ... disable motor
@@ -196,7 +196,7 @@ void motion_complete(){
           EEPROM.write(z_flag, true);              // ... and set EEPROM flag
           ZMoving = 0; }                                // ... and reset the moving variable
       }
- }
+ }}
 
 void turn_on(){
   digitalWrite(XEnablePin,LOW);
@@ -452,11 +452,11 @@ void joystick(){
   }
 
   if(z_read >= 0 && z_read < 300){
-    z_pos = map(z_read,0,300,-50,0);
+    z_pos = map(z_read,0,300,10,0);
     move_rel_in_z(z_pos);
   }
   else if(z_read >= 700 && z_read < 1024){
-    z_pos = map(z_read,700,1023,0,50);
+    z_pos = map(z_read,700,1023,0,-10);
     move_rel_in_z(z_pos);
   }
   else{
