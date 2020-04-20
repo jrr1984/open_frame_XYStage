@@ -23,7 +23,7 @@ lighta = light_dff[920:3500]
 intena = inten_dfff[920:3500]
 intend = intena/abs(lighta)
 inten = intend.transpose()
-yhat = savgol_filter(inten, 55, 3)
+
 plt.grid()
 clim = (350, 780)
 norm = plt.Normalize(*clim)
@@ -31,13 +31,15 @@ wl = np.arange(clim[0], clim[1] + 1, 2)
 colorlist = list(zip(norm(wl), [wavelength_to_rgb(w) for w in wl]))
 spectralmap = matplotlib.colors.LinearSegmentedColormap.from_list("spectrum", colorlist)
 wavel_array = wavel_dff.iloc[:, 0].values
-spectrum = yhat
+spectrum = inten
 plt.plot(wavel_dff, spectrum, color='black')
 
 plt.xlabel('Longitud de onda [nm]',fontsize=20)
 plt.ylabel('Intensidad [u.a.]',fontsize=20)
 plt.ylim([0,1])
+plt.fill_between(wavel_array,spectrum,np.max(spectrum),color='w')
 plt.xlim([400, 950])
+
 
 
 inten2_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/simultaneidad/defectoHUECO/intentrial.dat",header=None)
@@ -49,11 +51,12 @@ intena2 = inten2_dfff[920:3500]
 intend2 = intena2/abs(lighta2)
 inten2 = intend2.transpose()
 
-yhat2 = savgol_filter(inten2, 55, 3)
-spectrum2 = yhat2
+
+spectrum2 = inten2
 plt.plot(wavel_dff, spectrum2, color='black')
 y2 = np.linspace(0, np.max(spectrum2), 100)
 X2, Y2 = np.meshgrid(wavel_array, y2)
+plt.fill_between(wavel_array,spectrum2,np.max(spectrum2),color='w')
 
 
 inten3_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/27 de enero/intenten.dat",header=None)
@@ -65,10 +68,10 @@ intena3 = inten3_dfff[920:3500]
 intend3 = intena3/abs(lighta3)
 inten3 = intend3.transpose()
 
-yhat3 = savgol_filter(inten3, 55, 3)
-spectrum3 = yhat3
-plt.plot(wavel_dff, spectrum3, color='black')
 
+spectrum3 = inten3
+plt.plot(wavel_dff, spectrum3, color='black')
+plt.fill_between(wavel_array,spectrum3,np.max(spectrum3),color='w')
 
 
 inten4_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/27 de enero/inten.dat",header=None)
@@ -81,9 +84,10 @@ intena4 = inten4_dfff[920:3500]
 intend4 = intena4/abs(lighta4)
 inten4 = intend4.transpose()
 
-yhat4 = savgol_filter(inten4, 55, 3)
-spectrum4 = yhat4
+
+spectrum4 = inten4
 plt.plot(wavel_dff, spectrum4, color='black')
+plt.fill_between(wavel_array,spectrum4,np.max(spectrum4),color='w')
 
 
 plt.show()
