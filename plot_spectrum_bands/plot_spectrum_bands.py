@@ -12,11 +12,12 @@ from scipy import signal
 wavel_df = pd.read_pickle("wavel_df.pkl")
 wavel_df = wavel_df.iloc[0:]
 wavel_dff = wavel_df[920:3500]
-inten_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/27 de enero/intenten.dat",header=None)
-light_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/27 de enero/inten_1.dat",header=None)
-light_dff = light_df.iloc[54].values*0.32
+inten_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/espectros_transmision/panc.dat",header=None)
+light_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/espectros_transmision/light_thorlabs.dat",header=None)
+bg_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/espectros_transmision/background_ccs.dat",header=None)
+light_dff = light_df.iloc[54].values
 inten_dff = inten_df.iloc[48].values
-inten_dfff = inten_dff-abs(inten_df.iloc[-1].values)
+inten_dfff = inten_dff-abs(bg_df.iloc[:].values)
 lighta = light_dff[920:3500]
 intena = inten_dfff[920:3500]
 intend = intena/abs(lighta)
