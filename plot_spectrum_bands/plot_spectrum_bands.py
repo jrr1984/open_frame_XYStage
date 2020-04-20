@@ -11,17 +11,16 @@ from scipy import signal
 
 wavel_df = pd.read_pickle("wavel_df.pkl")
 wavel_df = wavel_df.iloc[0:]
-inten_df = pd.read_pickle("C:/Users/juanr/Documents/transm_spectrum/panc.pkl")
-light_df = pd.read_pickle("C:/Users/juanr/Documents/transm_spectrum/ligth_thorlabs.pkl")
-back_df = pd.read_csv("C:/Users/juanr/Documents/transm_spectrum/background.dat",header=None)
-light_array = light_df.iloc[:].values
-inten_wout_bg = inten_df.iloc[0].values - abs(back_df.iloc[:].values)
-def normalize(arr):
-    arr_min = arr.min()
-    arr_max = arr.max()
-    return (arr) / (arr_max)
-inten_norm = inten_wout_bg/light_array
-inten = inten_norm.transpose()
+wavel_dff = wavel_df[920:3500]
+inten_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/27 de enero/intenten.dat",header=None)
+light_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/27 de enero/inten_1.dat",header=None)
+light_dff = light_df.iloc[54].values*0.32
+inten_dff = inten_df.iloc[48].values
+inten_dfff = inten_dff-abs(inten_df.iloc[-1].values)
+lighta = light_dff[920:3500]
+intena = inten_dfff[920:3500]
+intend = intena/abs(lighta)
+inten = intend.transpose()
 
 
 
@@ -34,9 +33,9 @@ norm = plt.Normalize(*clim)
 wl = np.arange(clim[0], clim[1] + 1, 2)
 colorlist = list(zip(norm(wl), [wavelength_to_rgb(w) for w in wl]))
 spectralmap = matplotlib.colors.LinearSegmentedColormap.from_list("spectrum", colorlist)
-wavel_array = wavel_df.iloc[:, 0].values
+wavel_array = wavel_dff.iloc[:, 0].values
 spectrum = yhat
-plt.plot(wavel_df, spectrum, color='darkred')
+plt.plot(wavel_dff, spectrum, color='darkred')
 y = np.linspace(0, np.max(spectrum), 100)
 X, Y = np.meshgrid(wavel_array, y)
 
@@ -51,14 +50,14 @@ plt.ylim([0,1])
 plt.fill_between(wavel_array, spectrum ,np.max(spectrum), color='w')
 plt.xlim([400, 950])
 textstr = '\n'.join((
-    r'Banda Pancromática',
+    r'Banda Verde',
     r'$CWL = (%.0f$ ± 2) nm' % (CWLs(wavel_array,spectrum), ),
     r'$FWHM = %.0f$ nm' % (FWHM(wavel_array,spectrum), )))
 props = dict(boxstyle='round', facecolor='wheat')
 plt.text(825, 0.8, textstr, fontsize=10,
         verticalalignment='top', bbox=props)
 plt.hlines(FWHM_hlines(wavel_array,spectrum)[0],FWHM_hlines(wavel_array,spectrum)[1],FWHM_hlines(wavel_array,spectrum)[2],color="w",lw=2,linestyle='dashed')
-plt.axvline(FWHM_hlines(wavel_array,spectrum)[1], 0, np.max(spectrum)/2, label=r'$\lambda_{i} = (%.0f\hspace{0.2} ±\hspace{0.2} 2)\hspace{0.2} nm$' % FWHM_hlines(wavel_array,spectrum)[1],color = 'y',lw=2)
-plt.axvline(FWHM_hlines(wavel_array,spectrum)[2], 0, np.max(spectrum)/2, label=r'$\lambda_{s} = (%.0f\hspace{0.2} ±\hspace{0.2} 2)\hspace{0.2} nm$' % FWHM_hlines(wavel_array,spectrum)[2],color = 'g',lw=2)
+plt.axvline(FWHM_hlines(wavel_array,spectrum)[1], 0, np.max(spectrum)/2, label=r'$\lambda_{i} = (%.0f\hspace{0.2} ±\hspace{0.2} 2)\hspace{0.2} nm$' % FWHM_hlines(wavel_array,spectrum)[1],color = 'b',lw=2)
+plt.axvline(FWHM_hlines(wavel_array,spectrum)[2], 0, np.max(spectrum)/2, label=r'$\lambda_{s} = (%.0f\hspace{0.2} ±\hspace{0.2} 2)\hspace{0.2} nm$' % FWHM_hlines(wavel_array,spectrum)[2],color = 'r',lw=2)
 plt.legend()
 plt.show()

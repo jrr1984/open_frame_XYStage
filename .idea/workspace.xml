@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ad3355d-6a14-4677-a66d-277a89a29648" name="Default Changelist" comment="new env stage a secas">
-      <change afterPath="$PROJECT_DIR$/plot_spectrum_bands/fwhm.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/3dprintedparts/~$acopleRIGIDO.SLDPRT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,11 +14,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="836">
-              <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
+            <state relative-caret-position="191">
+              <caret line="52" column="19" lean-forward="true" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="205">
+              <caret line="34" column="42" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -73,6 +83,9 @@
       <find>expo</find>
       <find>normalize</find>
       <find>normali</find>
+      <find>np.max</find>
+      <find>alpha</find>
+      <find>imshow</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -89,13 +102,14 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/plot_spectrum_bands/fwhm.py" />
         <option value="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" />
+        <option value="$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="948" />
-    <option name="width" value="981" />
-    <option name="height" value="1032" />
+    <option name="x" value="949" />
+    <option name="width" value="980" />
+    <option name="height" value="1031" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -139,7 +153,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.plot_spectrum_bands">
+  <component name="RunManager" selected="Python.simultaneous_bands">
     <configuration name="CCS200" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="open_frame_XZStage" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -224,7 +238,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="thorlabs_ccs" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="simultaneous_bands" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="open_frame_XZStage" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -232,11 +246,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Anaconda3/envs/stage/Lib/site-packages/Instrumental_lib-0.6.dev0-py3.6.egg/instrumental/drivers/spectrometers" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/plot_spectrum_bands" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/Anaconda3/envs/stage/Lib/site-packages/Instrumental_lib-0.6.dev0-py3.6.egg/instrumental/drivers/spectrometers/thorlabs_ccs.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -247,11 +261,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.simultaneous_bands" />
         <item itemvalue="Python.plot_spectrum_bands" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.XZStage" />
         <item itemvalue="Python.CCS200" />
-        <item itemvalue="Python.thorlabs_ccs" />
       </list>
     </recent_temporary>
   </component>
@@ -297,7 +311,7 @@
       <window_info anchor="bottom" id="Debug" order="2" weight="0.38120568" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
-      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.49960285" weight="0.927305" />
+      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.49960285" weight="0.9166667" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32978722" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32978722" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49960285" weight="0.9468085" />
@@ -379,20 +393,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/fwhm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="836">
-          <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
+        <state relative-caret-position="191">
+          <caret line="52" column="19" lean-forward="true" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/fwhm.py">
+    <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
+        <state relative-caret-position="205">
+          <caret line="34" column="42" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
