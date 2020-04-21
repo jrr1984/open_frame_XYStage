@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ad3355d-6a14-4677-a66d-277a89a29648" name="Default Changelist" comment="new env stage a secas">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py" afterDir="false" />
     </list>
@@ -13,23 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="51" column="16" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="73">
-              <caret line="34" column="28" selection-end-line="93" />
+            <state relative-caret-position="139">
+              <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -37,10 +26,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/XYStageAndSpec.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-396">
+            <state>
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -96,6 +85,8 @@
       <find>np.max</find>
       <find>alpha</find>
       <find>imshow</find>
+      <find>extent</find>
+      <find>dashed</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -111,8 +102,8 @@
         <option value="$PROJECT_DIR$/XZStageAndSpec.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/plot_spectrum_bands/fwhm.py" />
-        <option value="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" />
         <option value="$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py" />
+        <option value="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" />
       </list>
     </option>
   </component>
@@ -134,6 +125,11 @@
             <path>
               <item name="open_frame_XYStage" type="b2602c69:ProjectViewProjectNode" />
               <item name="open_frame_XYStage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="open_frame_XYStage" type="b2602c69:ProjectViewProjectNode" />
+              <item name="open_frame_XYStage" type="462c0819:PsiDirectoryNode" />
+              <item name="plot_spectrum_bands" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -158,7 +154,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.simultaneous_bands">
+  <component name="RunManager" selected="Python.plot_spectrum_bands">
     <configuration name="CCS200" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="open_frame_XZStage" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -266,8 +262,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.simultaneous_bands" />
         <item itemvalue="Python.plot_spectrum_bands" />
+        <item itemvalue="Python.simultaneous_bands" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.XZStage" />
         <item itemvalue="Python.CCS200" />
@@ -308,7 +304,7 @@
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17791899" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17791899" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -316,7 +312,7 @@
       <window_info anchor="bottom" id="Debug" order="2" weight="0.38120568" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
-      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.49960285" weight="0.9166667" />
+      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.49960285" weight="0.9468085" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32978722" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32978722" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49960285" weight="0.9468085" />
@@ -398,17 +394,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/fwhm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="51" column="16" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
+        <state relative-caret-position="469">
+          <caret line="64" selection-start-line="64" selection-end-line="64" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
@@ -417,8 +406,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="73">
-          <caret line="34" column="28" selection-end-line="93" />
+        <state relative-caret-position="139">
+          <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
@@ -427,10 +416,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/XYStageAndSpec.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-396">
+        <state>
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plot_spectrum_bands/fwhm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
         </state>
       </provider>
     </entry>
