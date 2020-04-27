@@ -13,17 +13,17 @@ wavel_df = pd.read_pickle("wavel_df.pkl")
 wavel_df = wavel_df.iloc[0:]
 wavel_dff = wavel_df[940:3500]
 # inten_df = pd.read_pickle("C:/Users/juanr/Documents/thorlabs_step_motors_ZST213B/spectral_gui/inten_fin.pkl")
-inten_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/24 de enero 2020/inten_1m.dat",header=None)
+inten_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/31 de enero/inten0.dat",header=None)
 # banda_panc_df = inten_df.iloc[52866:78967,:]
 light_df = pd.read_pickle("C:/Users/juanr/Documents/data_mediciones/espectro fuente/light_df.pkl")
 # back_df = pd.read_csv("C:/Users/juanr/Documents/data_mediciones/XZStage/27 de enero/inten_blancoverdemedio.dat",header=None)
 light_dff = light_df.iloc[:].values*0.5
 # inten_dff = banda_panc_df.iloc[0].values - abs(back_df.iloc[689].values*0.1)
-inten_dff = inten_df.iloc[0].values - abs(inten_df.iloc[500].values)
+inten_dff = inten_df.iloc[200].values# - abs(inten_df.iloc[500].values)
 lighta = light_dff[940:3500]
 intena = inten_dff[940:3500]
-intend = intena/abs(lighta)
-inten = intend.transpose()
+# intend = intena/abs(lighta)
+inten = intena.transpose()
 
 
 
