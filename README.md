@@ -1,5 +1,4 @@
 # open_frame_XYStage
-Works with python 3.6.3
 
 Repositorio del software de control de la platina de microscopía desarrollada, de la sección 3.2.2, capítulo 3, Diseño, construcción y aplicación de un microespectrómetro, de la [Tesis de Licenciatura](https://github.com/jrr1984/master_thesis_scratch_and_dig/blob/master/tesis_tex/main.pdf).
 
