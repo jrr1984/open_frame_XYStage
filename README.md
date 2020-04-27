@@ -12,4 +12,4 @@ Repositorio del software de control de la platina de microscopía desarrollada, 
 
 
 
-[Dependencias del repositorio](https://github.com/jrr1984/Prototipo0_S-D_SpectralGUI/blob/master/dependencias.txt)
+[Dependencias del repositorio](https://github.com/jrr1984/open_frame_XYStage/blob/master/dependencias.txt)
