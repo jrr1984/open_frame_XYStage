@@ -8,7 +8,4 @@ Repositorio del software de control de la platina de microscopía desarrollada, 
 1. [Desarrollo del software de control de la platina](https://github.com/jrr1984/open_frame_XYStage/blob/master/main.py)
 2. [Driver de Arduino - Controladores de corriente A4988 de los motores paso a paso NEMA 17](https://github.com/jrr1984/open_frame_XYStage/tree/master/ino_main)
 
-
-
-
 [Dependencias del repositorio](https://github.com/jrr1984/open_frame_XYStage/blob/master/dependencias.txt)
