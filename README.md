@@ -1,6 +1,6 @@
 # open_frame_XYStage
 
-Repositorio del software de control de la platina de microscopía desarrollada, de la sección 3.2.2, capítulo 3, Diseño, construcción y aplicación de un microespectrómetro, de la [Tesis de Licenciatura](https://github.com/jrr1984/master_thesis_scratch_and_dig/blob/master/tesis_tex/main.pdf).
+Repositorio del software de control de la platina de microscopía desarrollada y de la integración del control de un espectrómetro CCS200 de Thorlabs a un software automatizado e implementado con multithreading de mediciones con un microespectrómetro. Ver capítulo 3, Diseño, construcción y aplicación de un microespectrómetro, de la [Tesis de Licenciatura](https://github.com/jrr1984/master_thesis_scratch_and_dig/blob/master/tesis_tex/main.pdf).
 
 ![funca?](https://github.com/jrr1984/open_frame_XYStage/blob/master/imgs/2ejesmontaje.jpeg)
 
