@@ -11,15 +11,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 initial_time=time.time()
 
-wavel_df = pd.read_pickle('wavel_df.pkl')
-wavel_array = wavel_df.iloc[:, 0].values
-plt.grid()
-wavelengths = wavel_array
-
-
 syst = System()
 syst.connect()
-# i = syst.step
 
 
 num_avg=2
