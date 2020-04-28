@@ -24,7 +24,7 @@ syst.connect()
 
 num_avg=2
 
-integ_time = '100 ms'
+integ_time = '10 ms'
 dx = 1
 dy = 2
 x_array_scan = np.arange(0,70,dx)
