@@ -1,7 +1,7 @@
 import logging,threading,time
 
 from logging.handlers import SocketHandler
-from XZStageAndSpec import System
+from XYStageAndSpec import System
 log = logging.getLogger('Root logger')
 log.setLevel(1)
 socket_handler = SocketHandler('127.0.0.1', 19996)
@@ -26,11 +26,11 @@ num_avg=2
 
 integ_time = '100 ms'
 dx = 1
-dz = 2
+dy = 2
 x_array_scan = np.arange(0,70,dx)
-z_array_scan = np.arange(0,2,dz)
+y_array_scan = np.arange(0,2,dy)
 
-BE_thread = threading.Thread(target=syst.scan_meander, args=(x_array_scan,z_array_scan,num_avg,integ_time))
+BE_thread = threading.Thread(target=syst.scan_meander, args=(x_array_scan,y_array_scan,num_avg,integ_time))
 BE_thread.start()
 
 

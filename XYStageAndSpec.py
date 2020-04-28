@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from logging.handlers import SocketHandler
 from instrumental import instrument, list_instruments
-from XZStage import XZStage
+from XYStage import XYStage
 log = logging.getLogger('Root logger')
 log.setLevel(1)
 socket_handler = SocketHandler('127.0.0.1', 19996)
@@ -32,13 +32,13 @@ class System(threading.Thread):
         self.ccs = instrument(paramsets[0])
         log.info('CCS200/M Spectrometer CONNECTED')
         time.sleep(0.1)
-        self.stage = XZStage()
+        self.stage = XYStage()
         self.stage.set_stage()
 
 
     def home_stage(self):
-        self.stage.move_to_x_z(0, 0)
-        log.info('XZStage is home.')
+        self.stage.move_to_x_y(0, 0)
+        log.info('XYStage is home.')
 
     def disconnect(self):
         self.ccs.close()
@@ -54,20 +54,20 @@ class System(threading.Thread):
                 for x in x_array_scan:
                     yield x, y
 
-    def continous_measurement(self,x,z,num_avg,integ_time):
-        self.stage.move_continous_to_x_z(x,z)
-        while ((self.stage.is_x_moving() == 1) or (self.stage.is_z_moving() == 1)):
+    def continous_measurement(self,x,y,num_avg,integ_time):
+        self.stage.move_continous_to_x_y(x,y)
+        while ((self.stage.is_x_moving() == 1) or (self.stage.is_y_moving() == 1)):
             self.intensity, self.wavelength = self.ccs.take_data(integration_time=integ_time, num_avg=num_avg,
                                                          use_background=False)
             self.step+=1
         return self.intensity,self.wavelength
 
 
-    def scan_meander(self,x_array_scan,z_array_scan,num_avg,integ_time):
-        for x,z in self.meander_scan(x_array_scan,z_array_scan):
-            self.stage.move_to_x_z(x,z)
+    def scan_meander(self,x_array_scan,y_array_scan,num_avg,integ_time):
+        for x,y in self.meander_scan(x_array_scan,y_array_scan):
+            self.stage.move_to_x_y(x,y)
             self.intensity, self.wavelength = self.ccs.take_data(integration_time=integ_time, num_avg=num_avg, use_background=False)
-            #log.debug('Spectra measured in position: ({},{})\u03BCm'.format(self.stage.get_x(),self.stage.get_z()))
+            #log.debug('Spectra measured in position: ({},{})\u03BCm'.format(self.stage.get_x(),self.stage.get_y()))
             self.step += 1
         log.info('FINISHED SCANNING.')
         return self.intensity, self.wavelength

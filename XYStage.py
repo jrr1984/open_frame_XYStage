@@ -8,7 +8,7 @@ socket_handler = SocketHandler('127.0.0.1', 19996)
 log.addHandler(socket_handler)
 
 
-class XZStage:
+class XYStage:
 
     def get_ports(self):
         ports = serial.tools.list_ports.comports()
@@ -34,109 +34,109 @@ class XZStage:
         connectPort = self.find_arduino(foundPorts)
 
         if connectPort != 'None':
-            self.XZStage = serial.Serial(connectPort, baudrate=115200, timeout=1)
-            log.info('XZStage - Serial: ' + connectPort)
+            self.XYStage = serial.Serial(connectPort, baudrate=115200, timeout=1)
+            log.info('XYStage - Serial: ' + connectPort)
             time.sleep(3)
 
         else:
             log.error('Connection Issue!')
             return
-        init_x = float(self.XZStage.readline())
-        init_z = float(self.XZStage.readline())
-        log.info('XZStage in position ({},{})\u03BCm'.format(init_x,init_z))
+        init_x = float(self.XYStage.readline())
+        init_y = float(self.XYStage.readline())
+        log.info('XYStage in position ({},{})\u03BCm'.format(init_x,init_y))
 
     def set_max_x_vel(self,value):
         value = bytes(str(value), encoding="ascii")
-        self.XZStage.write(bytes(b'maxxvel '+ value + b'\n'))
-        log.info('Max x vel: {}'.format(float(self.XZStage.readline())))
+        self.XYStage.write(bytes(b'maxxvel '+ value + b'\n'))
+        log.info('Max x vel: {}'.format(float(self.XYStage.readline())))
 
-    def set_max_z_vel(self,value):
+    def set_max_y_vel(self,value):
         value = bytes(str(value), encoding="ascii")
-        self.XZStage.write(bytes(b'maxzvel '+ value + b'\n'))
-        log.info('Max z vel: {}'.format(float(self.XZStage.readline())))
+        self.XYStage.write(bytes(b'maxyvel '+ value + b'\n'))
+        log.info('Max y vel: {}'.format(float(self.XYStage.readline())))
 
     def set_x_acceleration(self,value):
         value = bytes(str(value), encoding="ascii")
-        self.XZStage.write(bytes(b'xacc '+ value + b'\n'))
-        log.info('X acceleration: {}'.format(float(self.XZStage.readline())))
+        self.XYStage.write(bytes(b'xacc '+ value + b'\n'))
+        log.info('X acceleration: {}'.format(float(self.XYStage.readline())))
 
-    def set_z_acceleration(self,value):
+    def set_y_acceleration(self,value):
         value = bytes(str(value), encoding="ascii")
-        self.XZStage.write(bytes(b'zacc '+ value + b'\n'))
-        log.info('Z acceleration: {}'.format(float(self.XZStage.readline())))
+        self.XYStage.write(bytes(b'yacc '+ value + b'\n'))
+        log.info('Y acceleration: {}'.format(float(self.XYStage.readline())))
 
     def get_x_acceleration(self):
-        self.XZStage.write(bytes(b'wxacc\n'))
-        xacc = float(self.XZStage.readline())
+        self.XYStage.write(bytes(b'wxacc\n'))
+        xacc = float(self.XYStage.readline())
         return xacc
 
-    def get_z_acceleration(self):
-        self.XZStage.write(bytes(b'wzacc\n'))
-        zacc = float(self.XZStage.readline())
-        return zacc
+    def get_y_acceleration(self):
+        self.XYStage.write(bytes(b'wyacc\n'))
+        yacc = float(self.XYStage.readline())
+        return yacc
 
     def is_x_moving(self):
-        self.XZStage.write(bytes(b'isxmov\n'))
-        isxmov = int(self.XZStage.readline())
+        self.XYStage.write(bytes(b'isxmov\n'))
+        isxmov = int(self.XYStage.readline())
         return isxmov
 
-    def is_z_moving(self):
-        self.XZStage.write(bytes(b'iszmov\n'))
-        iszmov = int(self.XZStage.readline())
-        return iszmov
+    def is_y_moving(self):
+        self.XYStage.write(bytes(b'isymov\n'))
+        isymov = int(self.XYStage.readline())
+        return isymov
 
 
-    def move_to_x_z(self, x, z):
-        x_t,z_t = x,z
+    def move_to_x_y(self, x, y):
+        x_t,y_t = x,y
         x = bytes(str(x), encoding="ascii")
-        z = bytes(str(z), encoding="ascii")
-        self.XZStage.write(bytes(b'movx ' + x + b'\n'))
-        self.XZStage.write(bytes(b'movz ' + z + b'\n'))
-        log.info('Target position: ({},{})\u03BCm'.format(x_t,z_t))
-        while ((self.is_x_moving()==1) or (self.is_z_moving() ==1)):
+        y = bytes(str(y), encoding="ascii")
+        self.XYStage.write(bytes(b'movx ' + x + b'\n'))
+        self.XYStage.write(bytes(b'movy ' + y + b'\n'))
+        log.info('Target position: ({},{})\u03BCm'.format(x_t,y_t))
+        while ((self.is_x_moving()==1) or (self.is_y_moving() ==1)):
             log.debug('Still moving')
-            #log.debug('Actual position: ({},{})\u03BCm'.format(float(self.get_x()),float(self.get_z())))
+            #log.debug('Actual position: ({},{})\u03BCm'.format(float(self.get_x()),float(self.get_y())))
         log.info('Position achieved correctly.')
-        #log.info('XZStage in position ({},{})\u03BCm'.format(self.get_x(),self.get_z()))
+        #log.info('XYStage in position ({},{})\u03BCm'.format(self.get_x(),self.get_y()))
 
-    def move_continous_to_x_z(self,x,z):
-        x_t,z_t = x,z
+    def move_continous_to_x_y(self,x,y):
+        x_t,y_t = x,y
         x = bytes(str(x), encoding="ascii")
-        z = bytes(str(z), encoding="ascii")
-        self.XZStage.write(bytes(b'movx ' + x + b'\n'))
-        self.XZStage.write(bytes(b'movz ' + z + b'\n'))
-        log.info('Target position: ({},{})\u03BCm'.format(x_t,z_t))
+        y = bytes(str(y), encoding="ascii")
+        self.XYStage.write(bytes(b'movx ' + x + b'\n'))
+        self.XYStage.write(bytes(b'movy ' + y + b'\n'))
+        log.info('Target position: ({},{})\u03BCm'.format(x_t,y_t))
 
 
 
     def get_x(self):
-        self.XZStage.write(bytes(b'xx\n'))
-        x = float(self.XZStage.readline())
+        self.XYStage.write(bytes(b'xx\n'))
+        x = float(self.XYStage.readline())
         return x
 
-    def get_z(self):
-        self.XZStage.write(bytes(b'zz\n'))
-        z = float(self.XZStage.readline())
-        return z
+    def get_y(self):
+        self.XYStage.write(bytes(b'yy\n'))
+        y = float(self.XYStage.readline())
+        return y
 
-    def get_x_z(self):
-        self.XZStage.write(bytes(b'xz\n'))
-        x = float(self.XZStage.readline())
-        z = float(self.XZStage.readline())
-        return x , z
+    def get_x_y(self):
+        self.XYStage.write(bytes(b'xy\n'))
+        x = float(self.XYStage.readline())
+        y = float(self.XYStage.readline())
+        return x , y
 
     def get_x_target(self):
-        self.XZStage.write(bytes(b'xtarg\n'))
-        xt = float(self.XZStage.readline())
+        self.XYStage.write(bytes(b'xtarg\n'))
+        xt = float(self.XYStage.readline())
         return xt
 
-    def get_z_target(self):
-        self.XZStage.write(bytes(b'ztarg\n'))
-        zt = float(self.XZStage.readline())
-        return zt
+    def get_y_target(self):
+        self.XYStage.write(bytes(b'ytarg\n'))
+        yt = float(self.XYStage.readline())
+        return yt
 
     def turn_off(self):
         # time.sleep(0.1)
-        self.XZStage.write(bytes(b'off\n'))
-        self.XZStage.close()
-        log.info('XZStage DISCONNECTED')
+        self.XYStage.write(bytes(b'off\n'))
+        self.XYStage.close()
+        log.info('XYStage DISCONNECTED')
