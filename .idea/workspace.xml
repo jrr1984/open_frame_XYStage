@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6ad3355d-6a14-4677-a66d-277a89a29648" name="Default Changelist" comment="new env stage a secas">
-      <change beforePath="$PROJECT_DIR$/XYStage.py" beforeDir="false" afterPath="$PROJECT_DIR$/XYStage.py" afterDir="false" />
-    </list>
+    <list default="true" id="6ad3355d-6a14-4677-a66d-277a89a29648" name="Default Changelist" comment="new env stage a secas" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,13 +34,22 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/XYStage.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="142" lean-forward="true" selection-start-line="142" selection-end-line="142" />
+            <state relative-caret-position="44">
+              <caret line="2" column="11" lean-forward="true" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/XYStageAndSpec.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-968">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
               <folding>
-                <element signature="e#0#29#0" expanded="true" />
+                <element signature="e#0#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -71,7 +78,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ms</find>
       <find>targe</find>
       <find>sleep</find>
       <find>keep</find>
@@ -101,6 +107,7 @@
       <find>imshow</find>
       <find>extent</find>
       <find>dashed</find>
+      <find>z</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -114,7 +121,6 @@
         <option value="$USER_HOME$/Anaconda3/Lib/site-packages/tornado/platform/asyncio.py" />
         <option value="$PROJECT_DIR$/XZStage.py" />
         <option value="$PROJECT_DIR$/XZStageAndSpec.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/plot_spectrum_bands/fwhm.py" />
         <option value="$PROJECT_DIR$/plot_spectrum_bands/simultaneous_bands.py" />
         <option value="$PROJECT_DIR$/plot_spectrum_bands/plot_spectrum_bands.py" />
@@ -122,6 +128,8 @@
         <option value="$PROJECT_DIR$/plot_spectrum_bands/plot_defects_spectrums.py" />
         <option value="$USER_HOME$/Downloads/Prototipo0_S-D_SpectralGUI/spectral_gui/new_csv_from_another.py" />
         <option value="$PROJECT_DIR$/XYStage.py" />
+        <option value="$PROJECT_DIR$/XYStageAndSpec.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
@@ -411,25 +419,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/XYStageAndSpec.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Downloads/Prototipo0_S-D_SpectralGUI/spectral_gui/new_csv_from_another.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
@@ -469,10 +458,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/XYStage.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="142" lean-forward="true" selection-start-line="142" selection-end-line="142" />
+        <state relative-caret-position="44">
+          <caret line="2" column="11" lean-forward="true" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="7" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/XYStageAndSpec.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-968">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
