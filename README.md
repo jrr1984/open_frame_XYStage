@@ -7,7 +7,7 @@ Repositorio del software de control de la platina de microscopía desarrollada y
 1. [Driver de Arduino - Controladores de corriente A4988 de los motores paso a paso NEMA 17](https://github.com/jrr1984/open_frame_XYStage/tree/master/ino_main)
 2. [Desarrollo del software de control de la platina: XYStage python class - communication via SerialCommand with Arduino](https://github.com/jrr1984/open_frame_XYStage/blob/master/XYStage.py)
 3. [Integración del espectrómetro al software de control de la platina](https://github.com/jrr1984/open_frame_XYStage/blob/master/XYStageAndSpec.py)
-4. [Piezas 3D de diseño (colaboración del diseñador industrial y futuro matemático, Federico Armesto)](https://github.com/jrr1984/open_frame_XYStage/tree/master/3dprintedparts)
+4. [Piezas 3D de diseño (colaboración del diseñador industrial y futuro matemático, Federico Arrmesto)](https://github.com/jrr1984/open_frame_XYStage/tree/master/3dprintedparts)
 5. [Facturas de los insumos. Proveedores: Candy-Ho, 3DInsumos, INGIA](https://github.com/jrr1984/open_frame_XYStage/tree/master/Facturas_costos)
 
-[Dependencias del repositorio](https://github.com/jrr1984/open_frame_XYStage/blob/master/dependencias.txt)
+[Dependencias del repositorio](https://github.com/jrr1984/open_frame_XYStage/blob/master/dependencias.txt)	
